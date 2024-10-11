@@ -10,15 +10,21 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+
+    // show user list
     public function index()
     {
         $users = User::all();
         return view('users.list', compact('users'));
     }
+
+    // add new user
     public function create()
     {
         return view("users.create");
     }
+
+    // store into database
 
     public function store(Request $request)
     {
@@ -34,12 +40,16 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
+    // edit user Page
+
 
     public function edit($id)
     {
         $user = User::findOrFail($id);
         return view('users.edit', compact('user'));
     }
+
+    // edit user
     public function update(Request $request, $id)
     {  
         // \Log::info($request);
@@ -55,7 +65,7 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-
+    // delete user
 
     public function delete($id)
     {

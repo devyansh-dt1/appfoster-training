@@ -10,20 +10,23 @@ use \App\Http\Controllers\ProjectController;
 //     return view('users.list');
 // });
 
-Route::controller(UserController::class)->group(function () {
+// User routes
+Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::get('/', 'index')->name('users.index');
-    Route::get('/users/create', 'create')->name('users.create');
-    Route::post('users', 'store')->name('users.store');
-    Route::get('/users/{user}/edit', 'edit')->name('users.edit');
-    Route::put('/users/{user}', 'update')->name('users.update');
-    Route::delete('/users/{user}', 'delete')->name('users.delete');
+    Route::get('/create', 'showUserForm')->name('users.create');
+    Route::post('/', 'storeUser')->name('users.store');
+    Route::get('/{user_id}/edit', 'editUser')->name('users.edit');
+    Route::put('/{user_id}', 'updateUser')->name('users.update');
+    Route::delete('/{user_id}', 'deleteUser')->name('users.delete');
 });
 
-Route::controller(ProjectController::class)->group(function () {
-    Route::get('users/{user}/projects', 'listPro')->name('projects.list');
-    Route::get('projects/{user}/create', 'createPro')->name('projects.create');
-    Route::post('users/{user}/projects', 'storePro')->name('projects.store');
-    Route::get('users/{user}/projects/{project}/edit', 'editPro')->name('projects.edit');
-    Route::put('users/{user}/projects/{project}', 'updatePro')->name('projects.update');
-    Route::delete('users/{user}/projects/{project}', 'deletePro')->name('projects.delete');
+// Project routes
+Route::controller(ProjectController::class)->prefix('users/{user_id}/projects')->group(function () {
+    Route::get('/', 'listProject')->name('projects.list');
+    Route::get('/create', 'createProject')->name('projects.create');
+    Route::post('/', 'storeProject')->name('projects.store');
+    Route::get('/{project_id}/edit', 'editProject')->name('projects.edit');
+    Route::put('/{project_id}', 'updateProject')->name('projects.update');
+    Route::delete('/{project_id}', 'deleteProject')->name('projects.delete');
 });
+
