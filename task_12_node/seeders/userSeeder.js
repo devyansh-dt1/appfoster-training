@@ -1,6 +1,3 @@
-// seeders/userSeeder.js
-
-// const db = require('../db');
 require("dotenv").config();
 const { faker } = require("@faker-js/faker");
 
@@ -16,11 +13,11 @@ const seedUsers = () => {
   const users = [];
   for (let i = 0; i < 10; i++) {
     users.push([
-      faker.name.fullName(), // Name
-      faker.internet.userName(), // Username
-      faker.phone.number(), // Phone
-      faker.internet.email(), // Email
-      faker.internet.url(), // Website
+      faker.name.fullName(),
+      faker.internet.userName(),
+      faker.phone.number(),
+      faker.internet.email(),
+      faker.internet.url(),
       faker.company.name(),
     ]);
   }

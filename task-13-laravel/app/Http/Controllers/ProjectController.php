@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Project;
-use Illuminate\Support\Facades\Validator;
+
 
 class ProjectController extends Controller
 {
@@ -32,12 +31,14 @@ class ProjectController extends Controller
         return redirect()->route('projects.list', $user->id)->with('success', 'Project added successfully.');
     }
 
-    public function editPro(User $user,Project $project)
+    public function editPro(User $user,$projectId)
     {
+        $project = $user->projects()->findOrFail($projectId); 
         return view("projects.editPro", compact('user','project'));
     }
 
-    public function updatePro(Request $request,User $user, Project $project) {
+    public function updatePro(Request $request,User $user, $projectId) {
+        $project = $user->projects()->findOrFail($projectId);
         $request->validate([
             "title"=> "required"
         ]);
@@ -46,8 +47,9 @@ class ProjectController extends Controller
 
     }
 
-    public function deletePro(User $user, Project $project)
+    public function deletePro(User $user, $projectId)
     {
+        $project = $user->projects()->findOrFail($projectId); 
         $project->delete();
         return redirect()->route('projects.list', $user->id)->with('success', 'Project deleted successfully.');
     }

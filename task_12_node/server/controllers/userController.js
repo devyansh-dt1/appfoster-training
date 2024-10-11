@@ -1,7 +1,6 @@
 const mysql = require("mysql");
 
 const pool = mysql.createPool({
- 
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
@@ -19,7 +18,7 @@ exports.view = (req, res) => {
       connection.release();
 
       if (!err) {
-        res.render("home", { rows });
+        res.render("home", { rows, alert: req.query.alert });
       } else {
         console.log(err);
       }
@@ -27,8 +26,6 @@ exports.view = (req, res) => {
     });
   });
 };
-
-
 
 exports.form = (req, res) => {
   res.render("add-user");
@@ -49,7 +46,7 @@ exports.create = (req, res) => {
         connection.release();
 
         if (!err) {
-          res.render("add-user", { alert: "User added successfully" });
+          res.redirect("/?alert=User added successfully");
         } else {
           console.log(err);
         }
@@ -105,7 +102,10 @@ exports.update = (req, res) => {
               (err, rows) => {
                 connection.release();
                 if (!err) {
-                  res.render("edit-user", { rows , alert:'User Updated Successfully'});
+                  res.render("edit-user", {
+                    rows,
+                    alert: "User Updated Successfully",
+                  });
                 } else {
                   console.log(err);
                 }
@@ -120,7 +120,6 @@ exports.update = (req, res) => {
   });
 };
 
-
 // delete user
 
 exports.delete = (req, res) => {
@@ -134,7 +133,7 @@ exports.delete = (req, res) => {
       (err, rows) => {
         connection.release();
         if (!err) {
-          res.redirect('/');
+          res.redirect("/");
         } else {
           console.log(err);
         }
