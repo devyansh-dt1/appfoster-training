@@ -2,12 +2,13 @@ const express = require("express");
 const { engine } = require("express-handlebars");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
+const config = require("./config")
 
 require("dotenv").config();
 
 const app = express();
 
-const port = process.env.port || 5000;
+const port = config.port;
 
 //parsing middleware
 
@@ -36,16 +37,11 @@ app.engine(
 app.set("view engine", "hbs");
 
 // connection
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
+const pool = mysql.createPool(config.dbConfig);
 
 pool.getConnection((err, connection) => {
   if (err) throw err;
-  console.log("Connected");
+  console.log("Connected to the Database");
 });
 
 const routes = require("./server/routes/user");

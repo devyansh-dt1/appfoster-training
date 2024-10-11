@@ -2,6 +2,7 @@ require("dotenv").config();
 const { faker } = require("@faker-js/faker");
 
 const mysql = require("mysql");
+
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
