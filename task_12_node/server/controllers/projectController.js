@@ -11,7 +11,7 @@ exports.viewProject = (req, res) => {
     const user_id = req.params.user_id;
 
     connection.query(
-      "SELECT * FROM project WHERE user_id=?",
+      "SELECT * FROM project WHERE user_id=? AND deleted_at IS NULL",
       [user_id],
       (err, project) => {
         connection.release();
@@ -144,12 +144,16 @@ exports.deleteProject = (req, res) => {
     const user_id = req.body.user_id;
 
     connection.query(
-      "DELETE FROM project WHERE id=?",
+      // "DELETE FROM project WHERE id=?",
+      "UPDATE project SET deleted_at = NOW() WHERE id = ?",
       [project_id],
       (err, project) => {
         connection.release();
         if (!err) {
-          res.redirect(`/project/user/${user_id}`);
+          console.log(`Project with id ${project_id} was soft-deleted`);
+          res.redirect(
+            `/project/user/${user_id}?alert=Project Deleted Successfully`
+          );
         } else {
           console.log(err);
         }

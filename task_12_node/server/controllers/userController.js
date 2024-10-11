@@ -9,7 +9,7 @@ exports.view = (req, res) => {
     if (err) throw err;
     console.log("Connected");
 
-    connection.query("SELECT * FROM user", (err, rows) => {
+    connection.query("SELECT * FROM user WHERE deleted_at IS NULL", (err, rows) => {
       connection.release();
 
       if (!err) {
@@ -123,12 +123,13 @@ exports.delete = (req, res) => {
     console.log("Connected");
 
     connection.query(
-      "DELETE FROM user WHERE id=?",
+      "UPDATE user SET deleted_at = NOW() WHERE id = ?",
       [req.params.id],
       (err, rows) => {
         connection.release();
         if (!err) {
-          res.redirect("/");
+          console.log(`User with id ${req.params.id} was soft-deleted`);
+          res.redirect("/?alert=User deleted successfully");
         } else {
           console.log(err);
         }
